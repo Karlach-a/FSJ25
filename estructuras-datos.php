@@ -8,7 +8,6 @@
     //$array = new ArrayObject();
    
     //Declaracion de array literal
-    /*
     $array = [];
 
     //Declaracion de array a traves de un metodo
@@ -51,6 +50,10 @@
     //ARRAYS ASOCIATIVOS
     $arrayzote = [ "nombre" => "Jairo", "apellido" => "Vega Romero"];
     print_r($arrayzote);
+    //ARRAY
+    $arrayAsoc = ["A" => 2, "R" => 2, "Y" => 1 ];
+    print_r($arrayAsoc);
+    
     print_r(array_key_last($arrayzote));
     echo "\n";
     print_r($arrayzote[array_key_last($arrayzote)]);
@@ -138,7 +141,7 @@
     print("Dato eliminado: {$caseta1->dequeue()} \n");
 
     print_r($caseta1);
-
+  /*
     class Node{
         public $value;
         public $next;
@@ -171,12 +174,6 @@
             }else{
                 //Variable auxiliar
                 $aux = $this->head;
-                if($this->head->value === $data){
-                  print("Se Encontro");
-
-                $this->head= $this->head->next;
-                  return "Encontrado";
-                }
 
                 while($aux->next !== null){
                     $aux = $aux->next;
@@ -187,89 +184,149 @@
         }
 
         function delete($data){
-          if($this->head=== null){
-            return "la lista estaba previamente vacia. \n";
-          }
-
-          $aux= $this->head;
-
-          while($aux->next !==null){
-            if($aux->next->value==$data){
-              $aux->next=$aux->next->next;
-              print("si se elimino. \n");
-              return "se ha eliminado el dato.";
+            if($this->head === null){
+                return "La lista estaba previamente vacia. \n";
             }
-            $aux=$aux->next;
-          }
-          return "Ese dato no existe en la lista ";
-          print_r($aux);
-        }
-        
-        
-    }
 
-    
+            if($this->head->value === $data){
+                print("Se Encontro. \n");
+                $this->head = $this->head->next;
+                return "Encontrado";
+            }
+            
+            
+            $aux = $this->head;
+
+
+            while($aux->next !== null ){
+               if($aux->next->value == $data){
+                $aux->next = $aux->next->next;
+                print("Si se elimino. \n");
+                return "Se ha eliminado el dato.";
+               }
+
+                $aux = $aux->next;
+            }
+
+            return "Ese dato no existe en la lista.";
+
+        }
+
+        // Generar un metodo el cual me imprima o retorne el length de la lista
+        
+
+        // Generar un metodo para vaciar la lista
+
+    }
     
     $listita = new LinkedList();
-  
     $listita->insert(3);
     $listita->insert(5);
     $listita->insert(100);
+    $listita->delete(5);
     print_r($listita);
-    */
+
+*/
 
     class Node{
-        //creamos el nuevo nodo con el valor
         public $value;
         public $left;
         public $right;
 
-    function __construct($data)
-    {
-        $this->value=$data;
-    }
+        function __construct($data)
+        {
+            $this->value = $data;
+            $this->left = null;
+            $this->right = null;
+        }
     }
 
     class BinaryTree{
         public $root;
-        function __construct(){
-           $this->root = null;
+
+        function __construct()
+        {
+            $this->root = null;
         }
 
         function insert($data){
-            //creamos el nuevo nodo con el valor
-            $newNode= new NOde($data);
+            //Creamos el nuevo nodo con el valor
+            $newNode = new Node($data);
 
-            //chequeamos si la raiz eesta vacia
+            // CHEQUEAMOS SI LA RAIZ ESTA VACIA
             if($this->root === null){
-                //guardamos el nuevo nodo en la raiz
+                //Guardamos el nuevo nodo en la raiz
                 $this->root = $newNode;
                 return $this->root;
             }
- 
-            //Variable auxiliar para luego ir avanzando de nodo iniciando la raiz 
-            $currentNode=$this->root;
-//comparamos el valor del nodo nuevo con respecto al nodo igual 
-            if($newNode->value> $this->root->value){
-               //caso en qie sea mayor
-               if($currentNode->right === null){
-                $currentNode->right= $newNode;
-                return $newNode;
-               }
+
+            //Variable auxiliar para luego ir avanzando de nodo iniciando en la RAIZ
+            $currentNode = $this->root;
+            $flag = true;
+            while($flag){
+                //CUANDO EL NODO YA EXISTA PREVIAMENTE
+                if($newNode->value == $currentNode->value) return "Che cuchame, ya existe pa \n";
+
+                //Comparamos el valor del nuevo nodo, con respecto al nodo ACTUAL
+            if($newNode->value > $currentNode->value){
+                //CASO EN QUE SEA MAYOR
+                if($currentNode->right === null ){
+                    $currentNode->right = $newNode;
+                    return $newNode;
+                }
+                $currentNode = $currentNode->right;
             }else{
-                //caso en el que sea menor 
-                $currentNode->left=$newNode;
-                return $newNode;
+                //CASO EN QUE SEA MENOR
+                if($currentNode->left === null){
+                    $currentNode->left = $newNode;
+                    return $newNode;
+                }
+                $currentNode = $currentNode->left;
+            }
             }
         }
+
+        function delete($data){
+            $this->root = $this->deleteNode($data,$this->root);
+        }
+
+        function deleteNode($data,$node){
+
+            if($node === null){
+                return null;
+            }
+
+            if($data < $node->value){
+                $node->left = $this->deleteNode($data,$node->left);
+            }else if( $data > $node->value){
+                $node->right = $this->deleteNode($data,$node->right);
+            }else{
+                
+                if($node->left === null){
+                    return $node->right;
+                }elseif($node->right === null){
+                    return $node->left;
+                }
+
+                $node->right = $this->deleteNode($node->value,$node->right);
+            }
+            return $node;
+        }
+
     }
+
+
+
 
     $arbolito = new BinaryTree();
     $arbolito->insert(5);
     $arbolito->insert(10);
     $arbolito->insert(3);
+    $arbolito->insert(1);
     $arbolito->insert(15);
+    $arbolito->insert(12);
+    print($arbolito->insert(12));
+    $arbolito->delete(15);
+    $arbolito->delete(3);
     print_r($arbolito);
-
-
     ?> 
