@@ -12,20 +12,57 @@
 
     $aerolineas =  $_SESSION['aerolineas'] ;
 
-    if(isset($_POST['nombre'],$_POST['cantAviones'],$_POST['tipoAerolinea'])){
-        //print_r($_POST);
-        $id=count($aerolineas)+1;
-        $nombre = $_POST['nombre'];
-        $cantAviones = $_POST['cantAviones'];
-        $tipo = $_POST['tipoAerolinea'];
+    /*Crear nueva */
 
-        $aerolinea = new Aerolinea($id,$nombre,$cantAviones,$tipo);
-        //print_r($aerolinea);
-        array_push($aerolineas,$aerolinea);
-        echo "<br/>";
-        $_SESSION['aerolineas'] = $aerolineas;
-        header('Location: /FSJ25/artoline_project/index.php');
+    if(isset($_POST['createForm'])){
+   
+       // print_r($_POST);
+        if(isset($_POST['nombre'],$_POST['cantAviones'],$_POST['tipoAerolinea'])){
+            //print_r($_POST);
+            $id=count($aerolineas)+1;
+            $nombre = $_POST['nombre'];
+            $cantAviones = $_POST['cantAviones'];
+            $tipo = $_POST['tipoAerolinea'];
+    
+            $aerolinea = new Aerolinea($id,$nombre,$cantAviones,$tipo);
+            //print_r($aerolinea);
+            array_push($aerolineas,$aerolinea);
+            echo "<br/>";
+            $_SESSION['aerolineas'] = $aerolineas;
+            header('Location: /FSJ25/artoline_project/index.php');
+        }
+
     }
+
+    if(isset($_POST['updateForm'])){
+   
+       foreach($aerolineas as $aerolinea){
+        if($aerolinea->getId() == $_POST['id']){
+
+            print_r($aerolinea);
+            $aerolinea->setNombre($_POST['nombre']);
+            $aerolinea->setCant_aviones($_POST['cantAviones']);
+            $aerolinea->setTipo_aerolinea($_POST['tipoAerolinea']);
+
+        }
+       }
+         header('Location: /FSJ25/artoline_project');
+     }
+
+/*Eliminar una aerolinea */
+
+if(isset($_GET['delete'])){
+    $id=$_GET['delete'];
+
+    foreach($aerolineas as $key=> $aerolinea){
+        if($aerolinea->getId()==$id){
+            unset($aerolineas[$key]);
+            break;
+        }
+    }
+    $_SESSION['aerolineas'] = $aerolineas;
+    header('Location: /FSJ25/artoline_project');
+}
     
    // print_r($aerolineas);
 
@@ -52,10 +89,28 @@ function getAerolineaPorID($id,$aerolineas){
         $aerolineaEditable=getAerolineaPorID($_GET['edit'],$aerolineas);
         
         print_r($aerolineaEditable);
-    }
+    
     ?>
 
+    <!--Formulario de editar -->
     <form method="POST" action="">
+    <input type="hidden" name="updateForm" value="Soy el update">
+    <input type="hidden" name="id" value="<?php echo $aerolineaEditable->getId()?>">
+        <label>Nombre Aerolinea</label>
+        <input type="text" name="nombre" value="<?php echo $aerolineaEditable->getNombre();?>">
+
+        <label>Cantidad de Aviones</label>
+        <input type="text" name="cantAviones" value="<?php echo $aerolineaEditable->getCant_aviones();?>">
+
+        <label>Tipo de Aerolinea</label>
+        <input typw="text" name="tipoAerolinea" value="<?php echo $aerolineaEditable->getTipo_aerolinea();?>">
+        <button type="submit">Editar Aerolinea</button>
+    </form>
+
+    <?php } else {?>
+
+    <form method="POST" action="" >
+        <input type="hidden" name="createForm" value="Soy el create">
         <label>Nombre Aerolinea</label>
         <input type="text" name="nombre">
 
@@ -71,6 +126,8 @@ function getAerolineaPorID($id,$aerolineas){
 
         <button type="submit">Registrar Aerolinea</button>
     </form>
+
+    <?php }?>
 <main>
     <table>
         <thead>
@@ -87,7 +144,7 @@ function getAerolineaPorID($id,$aerolineas){
                     <td>{$aerolinea->getTipo_aerolinea()}</td>
                     <td>
                     <a href='?edit={$aerolinea->getId()}'>Editar </a>
-                    <a href='#'>Eliminar </a>
+                    <a href='?delete={$aerolinea->getId()}'>Eliminar </a>
                     
                     </td>
                 </tr>";
