@@ -14,6 +14,17 @@
         
         function registroVenta($usuario){
             //Registrar una venta con un usario referenciado
+         
+            $this->calcularTotal();
+            echo"Venta de registrada exitosamente:\n";
+            echo "id Venta:".$this->idVenta."\n";
+            echo "Usuario:".$usuario->getNombre()."\n";
+           
+            foreach($this->listaProductos as $producto){
+                echo "-" . $producto->getNombre()."| precio".$producto->getPrecio()."\n";
+            }
+
+            echo "Total: ".$this->total."\n";
 
         }
 

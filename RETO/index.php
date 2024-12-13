@@ -8,9 +8,9 @@ require_once './clases/Inventario.php';
         echo "1. Agregar nuevo producto \n";
         echo "2. Eliminar producto \n";
         echo "3. Actualizar producto \n";
-        echo "5. Generar Venta \n";
-        echo "6. Generar informe \n";
-        echo "7. Salir \n";
+        echo "4. Generar Venta \n";
+        echo "5. Generar informe \n";
+        echo "6. Salir \n";
         echo "Seleccione una opcion: ";
     }
 
@@ -21,6 +21,13 @@ require_once './clases/Inventario.php';
     }
 
     $inventario = new Inventario([]);
+
+    $producto1 = new Producto(1, "Cuadril", "Ala, Piernita, Culito de pollo empanizado", 1, 10, "Don Pollo", "Comida");
+    $producto2 = new Producto(2, "SuperCheese", "Pizza con orilla de queso", 5, 10, "Little Pizza", "Comida");
+    $producto3 = new Producto(3, "Texas Whopper", "Hamburguesa con jalapeño", 8, 10, "Burguerking", "Comida");
+    $inventario->agregarProducto($producto1);
+    $inventario->agregarProducto($producto2);
+    $inventario->agregarProducto($producto3);
     
     $flag = true;
     $idProducto = 0;
@@ -61,20 +68,18 @@ require_once './clases/Inventario.php';
                 break;
             case 3:
                 echo "Estas actualizando un producto \n";
+                
                 $idProducto = (int) prompt("Ingrese Id de producto que desea editar: \n");
                 
 
                 break;
-            case 4:
-                echo "Estas por devolver un producto \n";
-                break;
-            case 5: 
+            case 4: 
                 echo "Estas generando una nueva venta \n";
                 break;
-            case 6:
+            case 5:
                 echo "Estas generando un informe \n";
                 break;
-            case 7:
+            case 6:
                 echo "Estas saliendo ... \n";
                 $flag = false;
                 break;
